@@ -1,0 +1,16 @@
+
+View the architecture diagram
+
+The prototype flow is: upload → validate → preprocess → quality gate → severity model → uncertainty/abstention → explanation aid → results. Images failing quality checks or confidence thresholds should route to human review rather than receive a forced grade.
+
+Module breakdown
+Upload and results UI: accepts a fundus image and presents status, output, and limitations.
+Input validation: checks file type, readable image data, dimensions, and size; rejects invalid uploads safely.
+Preprocessing: applies the same resizing, normalization, and any approved transformations used during training.
+Image-quality gate: identifies images that are unsuitable for grading; returns a review/re-capture outcome where appropriate.
+Severity model: produces the diabetic-retinopathy grade estimate for images passing the quality gate.
+Uncertainty gate: applies a threshold selected on validation data; outputs a grade or abstains with “unable to assess.”
+Explanation aid: generates a saliency/activation visualization for inspection, presented as an aid rather than clinical proof.
+Results and privacy layer: displays the result and caveats; avoid retaining uploaded images by default.
+For a manageable build, implement modules 1–5 first, then add uncertainty handling, explanation, and interface polish. Keep training/evaluation code separate from the inference API so test-set evaluation remains independent of the demo.
+
